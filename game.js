@@ -28,6 +28,12 @@ const gameboard = (function() {
         const foundIndex = row.findIndex((item) => item === toChange);
         if (foundIndex !== -1) {
             const newRow = [...row];
+            console.log(`foundIndex: ${foundIndex}`);
+            console.log(`newValue: ${newValue}`);
+            console.log(`typeof newValue: ${typeof newValue}`);
+            if (typeof newValue !== 'string') {
+                console.error(`Expected 'newValue' to be a string but got ${typeof newValue}`);
+            }
             newRow[foundIndex] = newValue;
             return newRow;
         }
@@ -63,7 +69,7 @@ function createPlayer(name) {
 
 }
 
-function gameController() {
+const gameController = (function() {
     function startGame() {
         console.log("Start the game!");
         gameboard.displayBoard();
@@ -71,25 +77,26 @@ function gameController() {
 
     function availableBoxes() {
         // The function browses the board and builds a list of all the free squares
-        const open = gameboard.getBoard().flat().filter(item => item !== "X" && item !== "O");
-       
+        const open = gameboard.getBoard().flat().filter(item => (item !== 'X' && item !== 'O'));
+        
         return open;
     }
-    
+
     function enterMove(player, sign) {        
         next_move = true;
         while (next_move) {
             move = parseInt(prompt(`Your turn ${player.name}: `));            
-            
+                    
             if (move < 1 || move > 9 || isNaN(move)) {
                 console.log("Invalid move. Try again.");
             }
             else {   
                 const emptySquare = gameboard.getBoard().flat().indexOf(move);
+        
                 if (emptySquare !== -1) {    
                     gameboard.changeBoard(move, sign);
                     console.log(gameboard.getBoard());
-                    next_move = false;
+                    next_move = false;        
                 }
                 
                 if (next_move) {
@@ -103,7 +110,7 @@ function gameController() {
     function checkForWinner() {
                 
         const signs = [...gameboard.getSigns()];
-                
+        
         for (sign of signs) {
             const open = availableBoxes();
             
@@ -146,24 +153,23 @@ function gameController() {
         }       
     }
     return { startGame, availableBoxes, enterMove, checkForWinner };
-}
+})();
 
-const game = gameController();
 const player1 = createPlayer("Liam");
 const player2 = createPlayer("Fred");
 
-game.startGame();
+gameController.startGame();
 
 while (true) {
-    game.enterMove(player1, 'X');
-    
-    if (game.checkForWinner()) {
+    gameController.enterMove(player1, 'X');
+        
+    if (gameController.checkForWinner()) {
         break;
     }
-
-    game.enterMove(player2, 'O');
     
-    if (game.checkForWinner()) {
+    gameController.enterMove(player2, 'O');
+    
+    if (gameController.checkForWinner()) {
         break;
     }
 }
