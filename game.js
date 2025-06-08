@@ -325,6 +325,7 @@ const gameController = (function() {
         }        
     }
         
-    return { startGame, availableBoxes, enterMove, checkForWinner, displayGameBoard, freezeBoard, player1, player2, notify1, notify2 };
+    // return { startGame, availableBoxes, enterMove, checkForWinner, displayGameBoard, freezeBoard, player1, player2, notify1, notify2 };
+    return { }
     
 })();
