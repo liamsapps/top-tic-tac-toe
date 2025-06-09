@@ -1,9 +1,3 @@
-/* VSCODE: Needed to use prompt in terminal (testing without opening in browser)   
-   npm install prompt-sync
-*/
-// const prompt = require('prompt-sync')();
-
-// let toggleUser = true;
 
 const dialogInput = document.querySelector("#formDialog");
 
@@ -18,9 +12,6 @@ const gameboard = (function() {
     const getSigns = () => signs;
     const getBoard = () => board;  
     
-    // const notify1 = document.querySelector("#notify-1");
-    // const notify2 = document.querySelector("#notify-2");
-
     const setBoard = () => board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 
     const changeBoard = (toChange, newValue) => {
@@ -33,11 +24,8 @@ const gameboard = (function() {
         }
         return row;
         });
-    };
-       
-    // return { getSigns, getBoard, changeBoard, displayBoard, displayGameBoard };
-    // return { getSigns, getBoard, changeBoard, displayGameBoard, getLastClickedButtonId, setLastButtonID };
-    // return { getSigns, setBoard, getBoard, changeBoard, displayGameBoard, freezeBoard, notify1, notify2 };
+    };      
+    
     return { getSigns, setBoard, getBoard, changeBoard };
 })();
 
@@ -56,6 +44,9 @@ function createPlayer() {
 const gameController = (function() {
     
     let toggleUser = true;
+
+    const scoreLabel1 = document.querySelector("#scoreLabel1");
+    const scoreLabel2 = document.querySelector("#scoreLabel2");
 
     const notify1 = document.querySelector("#notify-1");
     const notify2 = document.querySelector("#notify-2");
@@ -122,7 +113,8 @@ const gameController = (function() {
         if (!myForm.checkValidity()) {
             event.preventDefault(); 
         }
-        else {        
+        else {  
+            // new game, need new players
             if (player1.getName() !== "") {
                 player1 = createPlayer();
             }
@@ -141,7 +133,9 @@ const gameController = (function() {
     function showForm() {
         btnStartGame.disabled = true;
         user1.value = "";
-        user2.value = "";
+        user2.value = "";        
+        scoreLabel1.style.setProperty('--player1-name', "");
+        scoreLabel2.style.setProperty('--player2-name', "");
         player1Score.value = "";
         player2Score.value = "";
         dialogInput.showModal();
@@ -155,8 +149,7 @@ const gameController = (function() {
         }
         
         btnStartGame.disabled = true; 
-        btnRefresh.disabled = false;
-        console.log("Start the game!"); 
+        btnRefresh.disabled = false;        
         gameboard.setBoard();        
         displayGameBoard();        
     }
@@ -180,6 +173,10 @@ const gameController = (function() {
 
     function displayGameBoard() {
         notify1.textContent = `Your turn ${toggleUser === true ? player1.getName() : player2.getName()}`;   
+
+        // Set the CSS variable used by ::before to add player name to labels
+        scoreLabel1.style.setProperty('--player1-name', `"${player1.getName()}"`);
+        scoreLabel2.style.setProperty('--player2-name', `"${player2.getName()}"`);
 
         const main = document.querySelector("#main");
 
@@ -324,8 +321,8 @@ const gameController = (function() {
             return true;
         }        
     }
-        
-    // return { startGame, availableBoxes, enterMove, checkForWinner, displayGameBoard, freezeBoard, player1, player2, notify1, notify2 };
+       
+    // no need to return anything, it's the controller, it takes from gameboard & created players
     return { }
     
 })();

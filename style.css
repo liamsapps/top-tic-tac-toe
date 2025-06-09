@@ -47,15 +47,39 @@ body {
 }
 
 #playerScores {
+    width: 30rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    flex-wrap: wrap;    
+    align-items: center;    
+    gap: 1rem;
 
 }
+
+#playerScores label {
+    width: 15rem;
+    text-align: right;
+}
+
 
 #playerScores input {
     width: 4rem;
 }
+
+/* prefix labels with player names using CSS variable */
+#scoreLabel1::before {
+  content: var(--player1-name); 
+  margin-right: 1rem;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#scoreLabel2::before {
+  content: var(--player2-name); 
+  margin-right: 1rem;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 
 #main {
     grid-area: main;
@@ -239,3 +263,5 @@ input:disabled {
     border: 1px solid black;
     border-radius: 0.3em;
 }
+
+
